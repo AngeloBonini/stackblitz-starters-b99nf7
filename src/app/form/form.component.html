@@ -1,0 +1,30 @@
+<div class="api-results">
+<h2>Combined Data from D&D and LOTR APIs</h2>
+
+<div *ngIf="error()">
+  <p class="error-message">{{ error() }}</p>
+</div>
+
+<div *ngIf="groupedMonsters()" class="dashboard">
+  <section *ngFor="let group of getGroupedMonstersKeys()" class="group-section">
+    <h3>{{ group }}</h3>
+    <div class="monster-grid">
+      <div *ngFor="let monster of groupedMonsters()[group]" class="monster-card">
+        <h5 class="monster-name">{{ monster.name }}</h5>
+        <p class="monster-info">Type: {{ monster.type }}</p>
+        <p class="monster-info">Challenge Rating: {{ monster.challenge_rating }}</p>
+        <p class="monster-info">Hit Points: {{ monster.hit_points }}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="list-section">
+    <h3>LOTR Movies</h3>
+    <div class="movie-grid">
+      <div *ngFor="let movie of data().lotrMovies" class="movie-card">
+        <h5 class="movie-name">{{ movie.name }}</h5>
+      </div>
+    </div>
+  </section>
+</div>
+</div>
