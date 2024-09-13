@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, combineLatest } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Open5eMonster } from '../models/monster.interface';
 @Injectable({
   providedIn: 'root',
 })
@@ -10,31 +11,16 @@ export class LotrService {
 
   constructor(private http: HttpClient) {}
 
-  // Method to get D&D monsters
-  getDnDMonsters(): Observable<any> {
-    return this.http.get('https://www.dnd5eapi.co/api/monsters');
-  }
-
-  // Method to get LOTR movies
-  getLotrMovies(): Observable<any> {
-    return this.http.get('https://the-one-api.dev/v2/movie', {
-      headers: {
-        Authorization: `Bearer ${this.LOTR_API_KEY}`,
-      },
-    });
-  }
-
-  // Method to combine data from both APIs
-  getCombinedData(): Observable<any> {
-    return combineLatest([this.getDnDMonsters(), this.getLotrMovies()]).pipe(
-      map(([dndData, lotrData]) => ({
-        dndMonsters: dndData.results,
-        lotrMovies: lotrData.docs,
-      })),
+  getOpen5eMonsters(): Observable<{ results: Open5eMonster[] }> {
+    return this.http.get<{ results: Open5eMonster[] }>('https://api.open5e.com/monsters/').pipe(
+      map((response) => response),
       catchError((error) => {
-        throw new Error('Error fetching data: ' + error.message);
+        throw new Error('Error fetching monster data: ' + error.message);
       })
     );
   }
+
+  // Method to merge data for a specific monster from both APIs
+
   
 }
